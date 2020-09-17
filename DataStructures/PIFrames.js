@@ -1,5 +1,5 @@
 /** mbhatia@vt.edu */
-(function($) {
+(function ($) {
   //Peixuan moved listeners to init so they will listen to the right buttons
   var PIFrames = {
     questionType: "",
@@ -7,7 +7,7 @@
     feedback: `<p hidden id="feedback">Incorrect!</p>`,
     ParseTree: null,
     //Peixuan added locations parameter to let people can change frames location
-    Injector(data, av_name, skip_to, locations = {top: 10, left: 5}) {
+    Injector(data, av_name, skip_to, locations = { top: 10, left: 5 }) {
       var obj = {
         myData: data,
 
@@ -47,13 +47,13 @@
           onclick: `PIFRAMES.revealQuestion("${av_name}")`
         }),
 
-        incrementQueue: function() {
+        incrementQueue: function () {
           if (this.queue.current != this.queue.elements.length - 1) {
             this.queue.current++;
           }
         },
 
-        decrementQueue: function() {
+        decrementQueue: function () {
           if (this.queue.current > 0) {
             this.queue.current--;
           }
@@ -66,7 +66,7 @@
         },
 
         // //expands the canvas at bottom to allow injection of question
-        resizeContainer: function(height) {
+        resizeContainer: function (height) {
           if (this.originalAVHeight == 0) {
             this.currentAVHeight = $(`#${this.av_name}`).outerHeight();
             this.originalAVHeight = this.currentAVHeight;
@@ -87,7 +87,7 @@
         },
 
         // expands the canvas to right to allow injection of question
-        resizeContainerWidth: function(width) {
+        resizeContainerWidth: function (width) {
           if (this.originalAVWidth == 0) {
             this.currentAVWidth = $(`#${this.av_name}`).outerWidth();
             this.originalAVWidth = this.currentAVWidth;
@@ -107,7 +107,7 @@
           }
         },
 
-        appendQuestion: function() {
+        appendQuestion: function () {
           var current = this.queue.current;
           var question = this.getQuestion(this.queue.elements[current]);
 
@@ -122,7 +122,7 @@
 
         //Peixuan updated selectors to the specfic one
         //so the css will not mess up if there are multiple frames on the page
-        updateCanvas: function(theHtml) {
+        updateCanvas: function (theHtml) {
           if ($("#" + av_name + " > .canvaswrapper > .picanvas > .PIFRAMES").children().length > 0) {
             $("#" + av_name + " > .canvaswrapper > .picanvas > .PIFRAMES").empty();
             $("#" + av_name + " > .canvaswrapper > .picanvas > .PIFRAMES").append(theHtml);
@@ -165,7 +165,7 @@
           }
         },
 
-        updateSlideCounter: function(jsavControl) {
+        updateSlideCounter: function (jsavControl) {
           //jsavforward button clicked
           if (jsavControl == 1) {
             this.queue.slideCounter++;
@@ -189,7 +189,7 @@
             this.queue.current = this.queue.elements.length - 1;
           }
         },
-        disableForwardButton: function() {
+        disableForwardButton: function () {
           var forwardButton = $(`#${this.av_name}`).find("span.jsavforward");
           $(forwardButton).css({
             "pointer-events": "none",
@@ -197,7 +197,7 @@
           });
         },
 
-        enableForwardButton: function() {
+        enableForwardButton: function () {
           var forwardButton = $(`#${this.av_name}`).find("span.jsavforward");
           $(forwardButton).css({
             "pointer-events": "auto",
@@ -205,7 +205,7 @@
           });
         },
 
-        disableFastForwardButton: function() {
+        disableFastForwardButton: function () {
           var forwardButton = $(`#${this.av_name}`).find("span.jsavend");
           $(forwardButton).css({
             "pointer-events": "none",
@@ -214,7 +214,7 @@
           // $(forwardButton).css("visibility", "hidden");
         },
 
-        enableFastForwardButton: function() {
+        enableFastForwardButton: function () {
           var forwardButton = $(`#${this.av_name}`).find("span.jsavend");
 
           $(forwardButton).css({
@@ -226,22 +226,22 @@
           //forwardButton.click();
         },
 
-        alertMessage: function() {
+        alertMessage: function () {
           var message = `<p class="REVEAL">You must answer the question to proceed forward.</p>`; //removed  Click Show Question since we removed the button
           return message;
         },
 
-        getQuestion: function(id) {
+        getQuestion: function (id) {
           var key = this.myData.translations.en;
           var question = key[id];
           return question;
         },
 
-        setStudentAnswer: function(id, answer) {
+        setStudentAnswer: function (id, answer) {
           this.myData.translations.en[id].studentAnswer = answer;
         },
 
-        addQuestion: function(id, ParseTree) {
+        addQuestion: function (id, ParseTree) {
           this.ParseTree = ParseTree;
           this.queue.elements.push(id);
 
@@ -257,14 +257,14 @@
           return this.alertMessage();
         },
 
-        buildElement: function(question) {
+        buildElement: function (question) {
           var type = question.type;
           //Peixuan added this part to auto check if type is multiple, select or T/F
-          if(type === "select"){
-            if(!Array.isArray(question.answer)){
+          if (type === "select") {
+            if (!Array.isArray(question.answer)) {
               type = "multiple";
             }
-            if (question.answer === "True"){
+            if (question.answer === "True") {
               type = "true/false";
             }
           }
@@ -291,18 +291,18 @@
 
         //Peixuan added this method to generate a random sequence including
         //numbers of [0...'limit')
-        randomSeqGenerator: function(limit){
+        randomSeqGenerator: function (limit) {
           var seq = [];
-          while(seq.length < limit){
-            var num = Math.floor(Math.random()*limit);
-            if(seq.indexOf(num) === -1){
+          while (seq.length < limit) {
+            var num = Math.floor(Math.random() * limit);
+            if (seq.indexOf(num) === -1) {
               seq.push(num);
             }
           }
           return seq;
         },
 
-        buildMultipleChoice: function(question) {
+        buildMultipleChoice: function (question) {
           var choices = question.choices;
           var execute = `PIFRAMES.saveAndCheckStudentAnswer("${this.av_name}")`;
           var form = $(
@@ -333,7 +333,7 @@
         },
 
         //Peixuan added this question type
-        buildTFChoice: function(question) {
+        buildTFChoice: function (question) {
           var execute = `PIFRAMES.saveAndCheckStudentAnswer("${this.av_name}")`;
           var form = $(
             `<form class=${this.av_name} onsubmit='return ${execute}'></form>`
@@ -350,7 +350,7 @@
           return form.append(html.join(""));
         },
 
-        buildTextBox: function(question) {
+        buildTextBox: function (question) {
           var execute = `PIFRAMES.saveAndCheckStudentAnswer("${this.av_name}")`;
           var form = $(
             `<form class=${this.av_name} onsubmit='return ${execute}'></form>`
@@ -371,7 +371,7 @@
           return form.append(html.join(""));
         },
 
-        buildTextBoxAny: function(question) {
+        buildTextBoxAny: function (question) {
           var execute = `PIFRAMES.saveAndCheckStudentAnswer("${this.av_name}")`;
           var form = $(
             `<form class=${this.av_name} onsubmit='return ${execute}'></form>`
@@ -391,7 +391,7 @@
           return form.append(html.join(""));
         },
 
-        buildSelectFromMultipleChoices: function(question) {
+        buildSelectFromMultipleChoices: function (question) {
           var choices = question.choices;
           var execute = `PIFRAMES.saveAndCheckStudentAnswer("${this.av_name}")`;
           var form = $(
@@ -416,7 +416,7 @@
         },
 
 
-        buildiFrames: function(question) {
+        buildiFrames: function (question) {
           var src = question.src;
           var iframe = $(
             `<iframe id = "iframe" width="91%" height="600px" src=${src}></iframe>`
@@ -425,10 +425,10 @@
           return iframe;
         },
 
-        getAttempts: function() {
+        getAttempts: function () {
           let data = {
             "frame_name": av_name,
-            "question":  this.queue.current,
+            "question": this.queue.current,
           };
           $.ajax({
             url: "/pi_attempts/get_attempts",
@@ -440,16 +440,16 @@
             xhrFields: {
               withCredentials: true
             },
-            success: function(data) {
+            success: function (data) {
               console.log(data)
             },
-            error: function(err) {
+            error: function (err) {
               console.log(err)
             }
           });
         },
 
-        getProgress: function() {
+        getProgress: function () {
           let data = {
             "frame_name": av_name,
           };
@@ -463,10 +463,32 @@
             xhrFields: {
               withCredentials: true
             },
-            success: function(data) {
+            success: function (data) {
               console.log(data)
             },
-            error: function(err) {
+            error: function (err) {
+              console.log(err)
+            }
+          });
+        },
+
+        gotAllQuestions() {
+          let data = {
+            "frame_name": av_name
+          };
+          $.ajax({
+            url: "/pi_attempts/send_score_to_lms",
+            type: "POST",
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            xhrFields: {
+              withCredentials: true
+            },
+            success: function (data) {
+              console.log(data)
+            },
+            error: function (err) {
               console.log(err)
             }
           });
@@ -480,8 +502,8 @@
           const correct = this.studentHasAnsweredQuestionCorrectly(this.queue.elements[current]);
           let data = {
             "frame_name": av_name,
-            "question":  this.queue.current,
-            "correct":   correct
+            "question": this.queue.current,
+            "correct": correct
           };
           $.ajax({
             url: "/pi_attempts",
@@ -492,10 +514,10 @@
             xhrFields: {
               withCredentials: true
             },
-            success: function(data) {
+            success: function (data) {
               console.log(data)
             },
-            error: function(err) {
+            error: function (err) {
               console.log(err)
             }
           });
@@ -550,6 +572,8 @@
             //the last question in the slideshow has been answered correctly, so enable the jsavend button
             if (current == this.queue.elements.length - 1) {
               this.enableFastForwardButton();
+              console.log("HERE");
+              this.gotAllQuestions();
             }
           } else {
             //scenario where student submits an answer on a slide, and then resubmits a wrong answer without switching slides
@@ -571,7 +595,7 @@
           }
         },
 
-        studentHasAnsweredQuestionCorrectly: function(id) {
+        studentHasAnsweredQuestionCorrectly: function (id) {
           var question = this.getQuestion(id);
 
           if (this.ParseTree != null) {
@@ -623,7 +647,7 @@
           }
         },
 
-        permutation: function(studentAnswer, questionAnswer) {
+        permutation: function (studentAnswer, questionAnswer) {
           var length = studentAnswer.length == questionAnswer.length;
           var studentSet =
             studentAnswer.charAt(0) == "{" &&
@@ -671,7 +695,7 @@
           return false;
         },
 
-        checkIfSlideHasQuestion: function(jsavControl) {
+        checkIfSlideHasQuestion: function (jsavControl) {
           this.updateSlideCounter(jsavControl);
 
           this.resizeContainer(0);
@@ -702,7 +726,7 @@
 
         //injects the appropriate question into the slide handler
         //disables forward button(s) if student hasn't answered the question correctly in the past
-        questionSlideListener: function() {
+        questionSlideListener: function () {
           if (
             this.queue.slideCounter > this.queue.lastEncounteredQuestionSlide
           ) {
@@ -717,7 +741,7 @@
           }
           var current = this.queue.current;
           if (
-             current < this.skip_to || this.studentHasAnsweredQuestionCorrectly(this.queue.elements[current])
+            current < this.skip_to || this.studentHasAnsweredQuestionCorrectly(this.queue.elements[current])
           ) {
             this.enableForwardButton();
             // if (($(`#${this.av_name}`).find('.REVEAL').length)) {
@@ -755,24 +779,24 @@
         xhrFields: {
           withCredentials: true
         },
-        success: function(data) {
+        success: function (data) {
           skip_to = parseInt(data.result)
         },
-        error: function(err) {
+        error: function (err) {
           skip_to = 0;
         }
       });
 
       //skip the slides to the checkpoint by triggering the forward button
       //this process need to be done after the page is fully loaded
-      if(skip_to !== 0){
-        $(document).ready(function() {
-          var counter = $("#"+av_name +" .jsavcounter").text().split("/");
+      if (skip_to !== 0) {
+        $(document).ready(function () {
+          var counter = $("#" + av_name + " .jsavcounter").text().split("/");
           var limit = parseInt(counter[1]);
           var current = parseInt(counter[0]);
-          while($("#"+av_name +" span.jsavforward").css("pointer-events") === "auto" && current < limit){
+          while ($("#" + av_name + " span.jsavforward").css("pointer-events") === "auto" && current < limit) {
             current++;
-            $("#"+av_name +" span.jsavforward").trigger("click");
+            $("#" + av_name + " span.jsavforward").trigger("click");
           }
         });
       }
@@ -780,14 +804,14 @@
     },
 
     //Peixuan added locations parameter
-    getQuestions(av_name, locations = {top: 10, left: 5}) {
+    getQuestions(av_name, locations = { top: 10, left: 5 }) {
       var json_url = $('script[src*="/' + av_name + '.js"]')[0].src + "on";
       var json_data;
       $.ajax({
         url: json_url,
         dataType: "json",
         async: false,
-        success: function(data) {
+        success: function (data) {
           json_data = data;
         }
       });
@@ -801,26 +825,26 @@
 
     //Peixuan added this method to allow users can append multiple data
     //into the same PIframme
-    appendQuestionData(av_name, locations = {top: 10, left: 5}, data){
-        //if this is the first question data, initialize the frame
-        if(typeof PIFRAMES.table[av_name] === "undefined"){
-          PIFRAMES.initElement(av_name);
-          var skip_to = this.skipToCheckPoint(av_name);
-          var injector = PIFRAMES.Injector(data, av_name, skip_to, locations);
-          PIFRAMES.table[av_name] = injector;
-          return injector;
-        }
-        else{ //append new dataset to the old data field
-          var injector = PIFRAMES.table[av_name];
-          var questions = injector.myData;
-          var newData = Object.assign(questions["translations"]["en"], data["translations"]["en"]);
-          questions["translations"]["en"] = newData;
-          return injector;
-        }
+    appendQuestionData(av_name, locations = { top: 10, left: 5 }, data) {
+      //if this is the first question data, initialize the frame
+      if (typeof PIFRAMES.table[av_name] === "undefined") {
+        PIFRAMES.initElement(av_name);
+        var skip_to = this.skipToCheckPoint(av_name);
+        var injector = PIFRAMES.Injector(data, av_name, skip_to, locations);
+        PIFRAMES.table[av_name] = injector;
+        return injector;
+      }
+      else { //append new dataset to the old data field
+        var injector = PIFRAMES.table[av_name];
+        var questions = injector.myData;
+        var newData = Object.assign(questions["translations"]["en"], data["translations"]["en"]);
+        questions["translations"]["en"] = newData;
+        return injector;
+      }
     },
 
     //Peixuan moved element initialization process to here
-    initElement(av_name){
+    initElement(av_name) {
       var container = $(`#${av_name}`);
 
       var qButton = $("<div />", {
@@ -879,29 +903,29 @@
 
       //edge case: what if first slide has question?
       //1 signifies a forward click; used by injector to increment queue if necessary
-      $("#" + av_name + " > .jsavcontrols > .jsavforward").click(function() {
+      $("#" + av_name + " > .jsavcontrols > .jsavforward").click(function () {
         var buttonGroup = $(this).parent();
         var parentAV = $(buttonGroup)
           .parent()
           .attr("id");
         PIFRAMES.callInjector(parentAV, 1);
       }),
-      //0 signifies a backward click; used by injector to decrement queue if necessary
-      $("#" + av_name + " > .jsavcontrols > .jsavbackward").click(function() {
+        //0 signifies a backward click; used by injector to decrement queue if necessary
+        $("#" + av_name + " > .jsavcontrols > .jsavbackward").click(function () {
           var buttonGroup = $(this).parent();
           var parentAV = $(buttonGroup)
             .parent()
             .attr("id");
           PIFRAMES.callInjector(parentAV, 0);
         }),
-      $("#" + av_name + " > .jsavcontrols > .jsavbegin").click(function() {
+        $("#" + av_name + " > .jsavcontrols > .jsavbegin").click(function () {
           var buttonGroup = $(this).parent();
           var parentAV = $(buttonGroup)
             .parent()
             .attr("id");
           PIFRAMES.callInjector(parentAV, -1);
         }),
-      $("#" + av_name + " > .jsavcontrols > .jsavend").click(function() {
+        $("#" + av_name + " > .jsavcontrols > .jsavend").click(function () {
           var buttonGroup = $(this).parent();
           var parentAV = $(buttonGroup)
             .parent()
@@ -913,18 +937,18 @@
     //add div to the av_name's picanvas, so that dynamic questions have a hooking point
     //Peixuan added locations parameter
     //and moved initialization process to the method above
-    init(av_name, av, locations = {top: 10, left: 5}) {
+    init(av_name, av, locations = { top: 10, left: 5 }) {
       console.log(av_name + " init")
       this.initElement(av_name);
       var injector = this.getQuestions(av_name, locations);
       return injector;
     },
 
-    revealQuestion: function(av_name) {
+    revealQuestion: function (av_name) {
       this.table[av_name].appendQuestion();
     },
 
-    saveAndCheckStudentAnswer: function(av_name) {
+    saveAndCheckStudentAnswer: function (av_name) {
       form = $(`form.${av_name}`);
       if (questionType.includes("textBox")) {
         checked = form.children(`input[name=${av_name}]`)[0].value;
